@@ -17,6 +17,8 @@ print(f"Fecha específica: {fecha_especifica}")
 # 4. Calcular la diferencia entre dos fechas
 fecha_futura = datetime(2025, 9, 8)
 diferencia = fecha_futura - fecha_actual
+ # Restar dos objetos datetime devuelve un objeto timedelta, que contiene la diferencia en días, segundos, etc.
+print(type(diferencia))
 print(f"Días hasta el {fecha_futura.strftime('%d/%m/%Y')}: {diferencia.days} días")
 
 # 5. Sumar o restar días a una fecha

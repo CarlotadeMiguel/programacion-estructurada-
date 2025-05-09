@@ -14,7 +14,7 @@ class DiasSemana(Enum):
 
 # Uso del enumerado
 def mostrar_dia(dia):
-    if dia in DiasSemana:
+    if isinstance(dia, DiasSemana):
         print(f"El día seleccionado es: {dia.name} (valor: {dia.value})")
     else:
         print("El valor no corresponde a un día de la semana.")

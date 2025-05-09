@@ -1,6 +1,7 @@
 import pickle
 import os
 import sys
+from functools import lru_cache
 
 # Cargar memo desde un archivo si existe
 def cargar_memo():
@@ -21,19 +22,22 @@ def guardar_memo(memo):
     with open("memo.pkl", "wb") as file:
         pickle.dump(memo, file)
 
+# Función factorial con lru_cache
+@lru_cache(maxsize=None)
+def factorial_lru(n):
+    """Calcula el factorial de un número de forma recursiva con lru_cache."""
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial_lru(n - 1)
+
+# Función para combinar lru_cache con persistencia
 def factorial(n, memo):
-    """Calcula el factorial de un número de forma recursiva con memoización."""
-    # Verificar primero si el número es demasiado grande antes de cualquier cálculo
-    if n > sys.getrecursionlimit() - 100:  # Margen de seguridad
-        raise RecursionError("Se excedió el límite de recursión")
-        
-    if n in memo:  # Verifica si el resultado ya está calculado
+    """Calcula el factorial utilizando lru_cache y actualiza el memo persistente."""
+    if n in memo:  # Si ya está en el memo persistente
         return memo[n]
-    if n == 0 or n == 1:  # Caso base
-        memo[n] = 1
-    else:
-        memo[n] = n * factorial(n - 1, memo)  # Almacena el resultado en memo
-    return memo[n]
+    resultado = factorial_lru(n)  # Calcular usando lru_cache
+    memo[n] = resultado  # Actualizar el memo persistente
+    return resultado
 
 # Programa principal con manejo mejorado de excepciones
 try:
@@ -60,13 +64,9 @@ try:
                     raise RecursionError("El número es demasiado grande")
                 
                 try:
-                    # Usamos un diccionario temporal para evitar problemas con memo existente
-                    memo_temp = {}
-                    resultado = factorial(numero, memo_temp)
+                    resultado = factorial(numero, memo)
                     print(f"El factorial de {numero} es: {resultado}")
-                    # Solo actualizamos memo si el cálculo fue exitoso
-                    memo.update(memo_temp)
-                    guardar_memo(memo)
+                    guardar_memo(memo)  # Guardar memo actualizado
                 except (RecursionError, OverflowError):
                     print("Error: El número es demasiado grande y excede el límite de recursión.")
             finally:

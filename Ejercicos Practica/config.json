@@ -1,0 +1,8 @@
+{   
+    "status": "éxito",   
+    "data": [   
+        {"id": 1, "nombre": "Libro 1", "precio": 29.99},   
+        {"id": 2, "nombre": "Libro 2", "precio": 39.99}   
+    ],   
+    "paginación": {"total": 2, "página": 1}   
+}   

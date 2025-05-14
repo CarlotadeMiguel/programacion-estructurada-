@@ -1,4 +1,3 @@
 *.pkl
 *.txt
-renombrarArchivos.py
 __pycache__
